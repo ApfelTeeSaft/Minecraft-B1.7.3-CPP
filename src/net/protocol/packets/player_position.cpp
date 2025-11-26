@@ -1,0 +1,41 @@
+#include "player_position.hpp"
+
+namespace mcserver {
+
+PacketPlayerPosition::PacketPlayerPosition(f64 x, f64 y, f64 stance, f64 z, bool on_ground)
+    : x(x), y(y), stance(stance), z(z), on_ground(on_ground) {}
+
+Result<void> PacketPlayerPosition::read(PacketBuffer& buffer) {
+    auto x_result = buffer.read_f64();
+    if (!x_result) return x_result.error();
+    x = x_result.value();
+
+    auto y_result = buffer.read_f64();
+    if (!y_result) return y_result.error();
+    y = y_result.value();
+
+    auto stance_result = buffer.read_f64();
+    if (!stance_result) return stance_result.error();
+    stance = stance_result.value();
+
+    auto z_result = buffer.read_f64();
+    if (!z_result) return z_result.error();
+    z = z_result.value();
+
+    auto ground_result = buffer.read_bool();
+    if (!ground_result) return ground_result.error();
+    on_ground = ground_result.value();
+
+    return Result<void>();
+}
+
+Result<void> PacketPlayerPosition::write(PacketBuffer& buffer) const {
+    buffer.write_f64(x);
+    buffer.write_f64(y);
+    buffer.write_f64(stance);
+    buffer.write_f64(z);
+    buffer.write_bool(on_ground);
+    return Result<void>();
+}
+
+} // namespace mcserver

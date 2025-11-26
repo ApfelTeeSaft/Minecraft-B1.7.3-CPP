@@ -1,0 +1,7 @@
+{
+    global:
+        create_plugin;
+        destroy_plugin;
+    local:
+        *;
+};
